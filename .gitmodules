@@ -7,6 +7,6 @@
 [submodule "Tools/kincmake"]
 	path = Tools/kincmake
 	url = https://github.com/Kode/kincmake.git
-[submodule "Tools/kraffiti"]
+[submodule "Tools/kraffiti_bin"]
 	path = Tools/kraffiti
 	url = https://github.com/Kode/kraffiti_bin.git
