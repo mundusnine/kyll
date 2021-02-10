@@ -1,0 +1,22 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Kyll: Debug Build",
+            "type": "shell",
+            "windows":{
+                "command": "${workspaceFolder}/Tools/nodejs_bin/node.exe"
+            },
+            "linux":{
+                "command": "${workspaceFolder}/Tools/nodejs_bin/node-linux64"
+            },
+            "args": [
+                "${workspaceFolder}/make.js", "--debug", "--compile"
+            ],
+            "problemMatcher":"$gcc",
+            "group": "build"
+        }
+    ]
+}
