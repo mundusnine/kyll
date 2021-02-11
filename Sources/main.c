@@ -98,44 +98,54 @@ void process_args(int argc, char** argv, Settings_t* opts) {
 	}
 }
 
-int main(int argc, char** argv) {
-
-	//Parse arguments
-	Settings_t options = { 0 };
-	process_args(argc, argv, &options);
+void process_file(Settings_t* options) {
 
 	//Open and create files
-	FILE* f = fopen(options.in,"rb");
-	if( f == NULL){
+	FILE* f = fopen(options->in, "rb");
+	if (f == NULL) {
 		printf("Could not open file, exiting...");
 		return 1;
 	}
 
-	out = fopen(options.out, "wb");
+	out = fopen(options->out, "wb");
 
 	//Get size of file
 	size_t size;
 	fseek(f, 0, SEEK_END);
 	size = ftell(f);
 	fseek(f, 0, SEEK_SET);
-	char* contents = calloc(sizeof(char),size);
+	char* contents = calloc(sizeof(char), size);
 	int value = fread(contents, sizeof(char), size, f);
-	if(value < size){
+	if (value < size) {
 		exit(1);
 	}
 
-	struct membuffer buf_out = {0};
-	membuf_init(&buf_out, size + size/8 + 64);
+	struct membuffer buf_out = { 0 };
+	membuf_init(&buf_out, size + size / 8 + 64);
 
-	if(md_html(contents,size,process_output,&buf_out,parser_flags,renderer_flags) == -1){
+	if (md_html(contents, size, process_output, &buf_out, parser_flags, renderer_flags) == -1) {
 		printf("Failed to parse with md4c");
 	}
 	char* output = calloc(sizeof(char), buf_out.size);
 	memcpy(output, buf_out.data, buf_out.size);
 	fwrite(buf_out.data, 1, buf_out.size, out);
-	//printf("%s",contents);
 
 	free(contents);
 	fclose(f);
+	fclose(out);
+}
+
+int main(int argc, char** argv) {
+
+	//Parse arguments
+	Settings_t options = { 0 };
+	process_args(argc, argv, &options);
+	if (options.in != 0 && options.out != 0 && strstr(options.in, ".md") != NULL && strstr(options.out, ".html") != NULL) {
+		process_file(&options);
+	}
+	else {
+		options.in
+	}
+	
 	return 0;
 }
