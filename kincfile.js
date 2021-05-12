@@ -1,13 +1,26 @@
 const fs = require('fs-extra');;
 fs.copy('./webcontent', './Deployment/webcontent', err => {
     if (err) return console.error(err)
-    console.log('Copied highlight.js to Deployment')
+    console.log('Copied webcontent to Deployment');
 })
 
+const system = platform === Platform.Windows ? "win32" :
+			   platform === Platform.Linux   ? "linux" :
+			   platform === Platform.OSX     ? "macos" :
+			   platform === Platform.HTML5   ? "html5" :
+			   platform === Platform.Android ? "android" :
+			   platform === Platform.iOS     ? "ios" :
+                                                  "unknown";
+
 let project = new Project('Kyll'); 
+
 project.kore = false; 
 
 project.setCmd();
+
+if(system == "win32"){
+    project.addDefine('WIN32');
+}
 
 project.addIncludeDir('Libraries/md4c/src');
 project.addIncludeDir('Libraries/tinydir');
